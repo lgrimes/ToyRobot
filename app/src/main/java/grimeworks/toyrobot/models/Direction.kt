@@ -3,7 +3,6 @@ package grimeworks.toyrobot.models
 /**
  * Created by laurengrimes on 6/12/17.
  */
-
-class Robot {
-    var currentPosition: RobotLocation? = null
+enum class Direction {
+    NORTH, SOUTH, EAST, WEST
 }
