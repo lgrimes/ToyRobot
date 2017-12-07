@@ -8,7 +8,7 @@ class Robot {
     var currentPosition: RobotLocation? = null
     private val defaultMoveSpaces = 1
 
-    fun updateLocation(location: RobotLocation) {
+    fun place(location: RobotLocation) {
         currentPosition = location
     }
 
@@ -63,7 +63,7 @@ class Robot {
             // Direction is in order of rotation, so retrieving index will work.
             val newDirectionEnumValue = evaluateDirectionRequest(directionEnumIndex)
             val newDirection = Direction.values()[newDirectionEnumValue]
-            updateLocation(RobotLocation(it.xPosition, it.yPosition, newDirection))
+            currentPosition = (RobotLocation(it.xPosition, it.yPosition, newDirection))
         }
     }
 

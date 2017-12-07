@@ -64,20 +64,18 @@ class GameManager(private val table: Table, private val robot: Robot) {
             GameCommand.PLACE -> {
                 requestedLocation?.let {
                     if (table.isValidLocation(it.xPosition,it.yPosition)) {
-                        robot.updateLocation(it)
+                        robot.place(it)
                     }
                 }
             }
             GameCommand.MOVE -> {
-                //Requires a current position
-                    robot.move()?.let {
-                        if (table.isValidLocation(it.xPosition, it.yPosition)) {
-                            robot.updateLocation(it)
-                        }
+                robot.move()?.let {
+                    if (table.isValidLocation(it.xPosition, it.yPosition)) {
+                        robot.place(it)
                     }
                 }
+            }
             GameCommand.LEFT, GameCommand.RIGHT -> {
-                //Requires a current position
                 robot.rotate(command)
             }
             GameCommand.REPORT -> {
