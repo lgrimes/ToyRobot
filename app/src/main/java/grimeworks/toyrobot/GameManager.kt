@@ -14,8 +14,45 @@ interface GameReporterDelegate {
 class GameManager(private val table: Table, private val robot: Robot) {
     private var gameReporterDelegate: GameReporterDelegate? = null
 
+    fun setGameReporterDelegate(delegate: GameReporterDelegate) {
+        gameReporterDelegate = delegate
+    }
+
     // Convenience function to robot location for testing
     fun currentRobotPosition(): RobotLocation? = robot.currentPosition
+
+    fun parseUserInputCommand(inputString: String): String? {
+        if (inputString.contains("MOVE",true)) {
+            // Move Command
+            performCommand(GameCommand.MOVE, null)
+        } else if (inputString.contains("PLACE", true)) {
+            // do additional work to check for requested location
+            if (inputString.contains(" ")){
+                val parametersString = inputString.split(" ")[1]
+                val parameters = parametersString.split(',')
+                try {
+                    val xPosition = parameters[0].toInt()
+                    val yPosition = parameters[1].toInt()
+                    val direction = parameters[2]
+                    val newLocation = RobotLocation(xPosition, yPosition, Direction.valueOf(direction.toUpperCase()))
+                    performCommand(GameCommand.PLACE, newLocation)
+                } catch (ex: IllegalArgumentException) {
+                    return "X and Y must be integers"
+                } catch (ex: NumberFormatException) {
+                   return "Direction must be NORTH, SOUTH, EAST or WEST"
+                }
+            }
+        } else if (inputString.contains("LEFT", true)) {
+            performCommand(GameCommand.LEFT, null)
+        } else if (inputString.contains("RIGHT", true)) {
+            performCommand(GameCommand.RIGHT, null)
+        } else if (inputString.contains("REPORT", true)) {
+            performCommand(GameCommand.REPORT, null)
+        } else {
+            return "Unknown command"
+        }
+        return null
+    }
 
     // Public function to handle all commands available in the game
     // PLACE: will place the robot at a give X, Y, DIRECTION

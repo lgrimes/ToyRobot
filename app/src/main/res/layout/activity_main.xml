@@ -7,31 +7,44 @@
     tools:context="grimeworks.toyrobot.MainActivity">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:lines="7"
-        android:text="COMMANDS\n\nPLACE X,Y,F \nMOVE \nLEFT \nRIGHT \nREPORT"/>
+        android:text="COMMANDS\n\n- PLACE X,Y,F \n- MOVE \n- LEFT \n- RIGHT \n- REPORT"/>
 
     <EditText
         android:id="@+id/user_input_et"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter your robot commands here"
+        android:hint="Enter your robot commands here"
+        android:imeOptions="actionDone"
+        android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:layout_width="120dp"
+        android:id="@+id/execute_command"
+        android:layout_width="150dp"
         android:layout_height="60dp"
-        android:text="Execute"
+        android:text="Execute Command"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/user_input_et" />
 
+    <Button
+        android:id="@+id/reset_command"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="Reset Game"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 </android.support.constraint.ConstraintLayout>
