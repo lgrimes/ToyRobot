@@ -6,4 +6,4 @@ import android.graphics.Point
  */
 
 // Used to store location information about the current object on the table
-data class RobotLocation(val point: Point, val direction: Direction)
+data class RobotLocation(val xPosition: Int, val yPosition: Int, val direction: Direction)

@@ -1,13 +1,18 @@
-package grimeworks.toyrobot.models
+package grimeworks.toyrobot
 
-import android.graphics.Point
+import grimeworks.toyrobot.models.*
 
 /**
  * Created by laurengrimes on 6/12/17.
  */
 
-class Game(private val table: Table, private val robot: Robot) {
+interface GameReporterDelegate {
+    fun didReceiveLocationDetails(xPosition: Int, yPosition: Int, direction: Direction)
+}
+
+class GameManager(private val table: Table, private val robot: Robot) {
     private val defaultMoveSpaces = 1
+    private var gameReporterDelegate: GameReporterDelegate? = null
 
     // Public function to handle all commands available in the game
     // PLACE: will place the robot at a give X, Y, DIRECTION
@@ -37,6 +42,11 @@ class Game(private val table: Table, private val robot: Robot) {
             }
             GameCommand.REPORT -> {
                 //Requires a current position
+                gameReporterDelegate?.apply {
+                    robot.currentPosition?.let {
+                        this.didReceiveLocationDetails(it.xPosition, it.yPosition, it.direction)
+                    }
+                }
             }
         }
     }
@@ -45,13 +55,11 @@ class Game(private val table: Table, private val robot: Robot) {
         robot.currentPosition = null
     }
 
-    fun currentRobotPosition(): RobotLocation? {
-        return robot.currentPosition
-    }
+    fun currentRobotPosition(): RobotLocation? = robot.currentPosition
 
     // Check if the requestedLocation is valid on the table, if so, set robot location to it.
     private fun moveRobotTo(requestedLocation: RobotLocation) {
-        if (table.isValidLocation(requestedLocation.point.x,requestedLocation.point.y)) {
+        if (table.isValidLocation(requestedLocation.xPosition,requestedLocation.yPosition)) {
             robot.currentPosition = requestedLocation
         }
     }
@@ -62,24 +70,28 @@ class Game(private val table: Table, private val robot: Robot) {
     * */
     private fun isValidMoveRequest(direction: Direction, spaces: Int): RobotLocation? {
         robot.currentPosition?.let {
-            val requestedPoint: Point
+            val requestedX: Int
+            val requestedY: Int
             when(direction){
                 Direction.NORTH -> {
-                    requestedPoint = Point(it.point.x, it.point.y + spaces)
+                    requestedX = it.xPosition
+                    requestedY = it.yPosition + spaces
                 }
                 Direction.EAST -> {
-                    requestedPoint = Point(it.point.x + spaces, it.point.y)
+                    requestedX = it.xPosition + spaces
+                    requestedY = it.yPosition
                 }
                 Direction.SOUTH -> {
-                    requestedPoint = Point(it.point.x, it.point.y-spaces)
+                    requestedX = it.xPosition
+                    requestedY = it.yPosition-spaces
                 }
                 Direction.WEST -> {
-                    requestedPoint = Point(it.point.x - spaces, it.point.y)
+                    requestedX = it.xPosition - spaces
+                    requestedY = it.yPosition
                 }
-
             }
-            if (table.isValidLocation(requestedPoint.x, requestedPoint.y)) {
-                return RobotLocation(requestedPoint, direction)
+            if (table.isValidLocation(requestedX, requestedY)) {
+                return RobotLocation(requestedX, requestedY, direction)
             } else {
                 return null
             }
@@ -99,7 +111,7 @@ class Game(private val table: Table, private val robot: Robot) {
             }
             // Direction is in order of rotation, so retrieving index will work.
             val newDirection = Direction.values()[newDirectionEnumValue]
-            robot.currentPosition = RobotLocation(it.point, newDirection)
+            robot.currentPosition = RobotLocation(it.xPosition, it.yPosition, newDirection)
         }
     }
 

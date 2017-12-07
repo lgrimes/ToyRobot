@@ -9,7 +9,9 @@ import android.graphics.Point
 class Table(private val width: Int, private val height: Int) {
 
     fun isValidLocation(x: Int, y: Int): Boolean {
-        return ((0..width).contains(x) && (0..height).contains(y))
+        val widthRange = 0..width
+        val heightRange = 0..height
+        return (widthRange.contains(x) && heightRange.contains(y))
     }
 
     fun getWidth(): Int {
